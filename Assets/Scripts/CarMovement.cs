@@ -5,7 +5,8 @@ using UnityEngine;
 public class CarMovement : MonoBehaviour
 {
     public int m_PlayerNumber = 1;
-    public float m_Speed = 12f;
+    public float m_Speed = 0f;
+    public float m_MaxSpeed = 50f;
     public float m_TurnSpeed = 180f;
     public float m_Acceleration = 0.01f;
 
@@ -40,12 +41,25 @@ public class CarMovement : MonoBehaviour
 
         if (Input.GetKey("w"))
         {
-            transform.Translate(0, 0, 10.0f * Time.deltaTime);
+            if (m_Speed < m_MaxSpeed)
+                m_Speed += m_Acceleration;
         }
         else if (Input.GetKey("s"))
         {
-            transform.Translate(0, 0, -10.0f * Time.deltaTime);
+            if (m_Speed > -m_MaxSpeed)
+                m_Speed -= m_Acceleration;
         }
+        else
+        {
+            if (m_Speed > -m_Acceleration && m_Speed < m_Acceleration)
+                m_Speed = 0f;
+            if (m_Speed > 0f)
+                m_Speed -= m_Acceleration;
+            else if (m_Speed < 0f)
+                m_Speed += m_Acceleration;
+        }
+
+        transform.Translate(0, 0, m_Speed * Time.deltaTime);
     }
 
     private void Turn()
@@ -56,11 +70,11 @@ public class CarMovement : MonoBehaviour
 
         if (Input.GetKey("a"))
         {
-            transform.Rotate(0, -50.0f * Time.deltaTime, 0);
+            transform.Rotate(0, -m_TurnSpeed * Time.deltaTime, 0);
         }
         else if (Input.GetKey("d"))
         {
-            transform.Rotate(0, 50.0f * Time.deltaTime, 0);
+            transform.Rotate(0, m_TurnSpeed * Time.deltaTime, 0);
         }
     }
 }
