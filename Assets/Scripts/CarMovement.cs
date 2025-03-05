@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class CarMovement : MonoBehaviour
@@ -9,6 +10,9 @@ public class CarMovement : MonoBehaviour
     public float m_MaxSpeed = 50f;
     public float m_TurnSpeed = 180f;
     public float m_Acceleration = 0.01f;
+
+    private int coinCount = 0;
+    public TMP_Text coinCountText;
 
     private string m_MovementAxisName;
     private string m_TurnAxisName;
@@ -39,12 +43,12 @@ public class CarMovement : MonoBehaviour
         //Vector3 movement = transform.forward * m_MovementInputValue * m_Speed * Time.deltaTime;
         //m_Rigidbody.MovePosition(m_Rigidbody.position + movement);
 
-        if (Input.GetKey("w"))
+        if (Input.GetKey(KeyCode.W))
         {
             if (m_Speed < m_MaxSpeed)
                 m_Speed += m_Acceleration;
         }
-        else if (Input.GetKey("s"))
+        else if (Input.GetKey(KeyCode.S))
         {
             if (m_Speed > -m_MaxSpeed)
                 m_Speed -= m_Acceleration;
@@ -68,13 +72,23 @@ public class CarMovement : MonoBehaviour
         //Quaternion turnRotation = Quaternion.Euler(0f, turn, 0f);
         //m_Rigidbody.MoveRotation(m_Rigidbody.rotation * turnRotation);
 
-        if (Input.GetKey("a"))
+        if (Input.GetKey(KeyCode.A))
         {
             transform.Rotate(0, -m_TurnSpeed * Time.deltaTime, 0);
         }
-        else if (Input.GetKey("d"))
+        else if (Input.GetKey(KeyCode.D))
         {
             transform.Rotate(0, m_TurnSpeed * Time.deltaTime, 0);
+        }
+    }
+
+    private void OnTriggerEnter(Collider obj)
+    {
+        if (obj.CompareTag("Coin") && obj.gameObject.activeSelf)
+        {
+            obj.gameObject.SetActive(false);
+            coinCount++;
+            coinCountText.text = "Coins: " + coinCount;
         }
     }
 }
