@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CarMovement : MonoBehaviour
@@ -13,6 +14,13 @@ public class CarMovement : MonoBehaviour
 
     private int coinCount = 0;
     public TMP_Text coinCountText;
+
+    string[] crocodiles = { "Blue", "Red" };
+
+    public GameObject bronzeRocketUI;
+    public GameObject silverRocketUI;
+    public GameObject goldRocketUI;
+    private GameObject[] rockets;
 
     private string m_MovementAxisName;
     private string m_TurnAxisName;
@@ -27,6 +35,11 @@ public class CarMovement : MonoBehaviour
         //m_MovementAxisName = "Vertical" + m_PlayerNumber;
         //m_TurnAxisName = "Horizontal" + m_PlayerNumber;
         m_Rigidbody = GetComponent<Rigidbody>();
+
+        bronzeRocketUI.SetActive(false);
+        silverRocketUI.SetActive(false);
+        goldRocketUI.SetActive(false);
+        rockets = new GameObject[] { bronzeRocketUI, silverRocketUI, goldRocketUI };
     }
 
     // Update is called once per frame
@@ -89,6 +102,18 @@ public class CarMovement : MonoBehaviour
             obj.gameObject.SetActive(false);
             coinCount++;
             coinCountText.text = "Coins: " + coinCount;
+        }
+        else if (obj.CompareTag("Chest") && obj.gameObject.activeSelf)
+        {
+            obj.gameObject.SetActive(false);
+            int itemChooser = Random.Range(0, 1);
+            switch(itemChooser)
+            {
+                case 0:
+                    int rocketChosen = Random.Range(0, rockets.Length);
+                    rockets[rocketChosen].gameObject.SetActive(true);
+                    break;
+            }
         }
     }
 }
