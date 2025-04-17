@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -6,16 +7,32 @@ using UnityEngine;
 
 public class CarMovement : MonoBehaviour
 {
-    public int m_PlayerNumber = 1;
-    public float m_Speed = 0f;
-    public float m_MaxSpeed = 50f;
-    public float m_TurnSpeed = 180f;
-    public float m_Acceleration = 0.01f;
+    private enum Items
+    {
+        NONE,
+        BRONZE_ROCKET,
+        SILVER_ROCKET,
+        GOLD_ROCKET,
+        BLUE_CROCODILE,
+        RED_CROCODILE,
+        PISTOL_GUN,
+        MACHINE_GUN
+    }
+
+    public int PlayerNumber = 1;
+    public float Speed;
+    public float MaxSpeed;
+    public float TurnSpeed;
+    public float Acceleration;
+    public float BoostAmount;
 
     private int coinCount = 0;
     public TMP_Text coinCountText;
 
-    string[] crocodiles = { "Blue", "Red" };
+    private Items itemHeld = Items.NONE;
+    private int silverRocketCount = 0;
+    private float goldRocketTime = 0f;
+    private bool goldRocketActivated = false;
 
     public GameObject bronzeRocketUI;
     public GameObject silverRocketUI;
@@ -49,6 +66,7 @@ public class CarMovement : MonoBehaviour
         //m_TurnInputValue = Input.GetAxis(m_TurnAxisName);
         Move();
         Turn();
+        UseItem();
     }
 
     private void Move()
@@ -58,25 +76,31 @@ public class CarMovement : MonoBehaviour
 
         if (Input.GetKey(KeyCode.W))
         {
-            if (m_Speed < m_MaxSpeed)
-                m_Speed += m_Acceleration;
+            if (Speed < MaxSpeed)
+                Speed += Acceleration;
         }
         else if (Input.GetKey(KeyCode.S))
         {
-            if (m_Speed > -m_MaxSpeed)
-                m_Speed -= m_Acceleration;
+            if (Speed > -MaxSpeed)
+                Speed -= Acceleration;
         }
         else
         {
-            if (m_Speed > -m_Acceleration && m_Speed < m_Acceleration)
-                m_Speed = 0f;
-            if (m_Speed > 0f)
-                m_Speed -= m_Acceleration;
-            else if (m_Speed < 0f)
-                m_Speed += m_Acceleration;
+            if (Speed > -Acceleration && Speed < Acceleration)
+                Speed = 0f;
+            if (Speed > 0f)
+                Speed -= Acceleration;
+            else if (Speed < 0f)
+                Speed += Acceleration;
         }
 
-        transform.Translate(0, 0, m_Speed * Time.deltaTime);
+        //Slow down car while boosted
+        if (Speed > MaxSpeed)
+        {
+            Speed -= Acceleration;
+        }
+
+        transform.Translate(0, 0, Speed * Time.deltaTime);
     }
 
     private void Turn()
@@ -87,11 +111,58 @@ public class CarMovement : MonoBehaviour
 
         if (Input.GetKey(KeyCode.A))
         {
-            transform.Rotate(0, -m_TurnSpeed * Time.deltaTime, 0);
+            transform.Rotate(0, -TurnSpeed * Time.deltaTime, 0);
         }
         else if (Input.GetKey(KeyCode.D))
         {
-            transform.Rotate(0, m_TurnSpeed * Time.deltaTime, 0);
+            transform.Rotate(0, TurnSpeed * Time.deltaTime, 0);
+        }
+    }
+
+    private void UseItem()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftShift) && itemHeld != Items.NONE)
+        {
+            switch (itemHeld)
+            {
+                case Items.BRONZE_ROCKET:
+                    Speed += BoostAmount;
+                    if (Speed > MaxSpeed + BoostAmount)
+                        Speed = MaxSpeed + BoostAmount;
+                    itemHeld = Items.NONE;
+                    rockets[0].SetActive(false);
+                    break;
+                case Items.SILVER_ROCKET:
+                    Speed += BoostAmount;
+                    if (Speed > MaxSpeed + BoostAmount)
+                        Speed = MaxSpeed + BoostAmount;
+                    silverRocketCount--;
+                    if (silverRocketCount <= 0)
+                    {
+                        itemHeld = Items.NONE;
+                        rockets[1].SetActive(false);
+                    }
+                    break;
+                case Items.GOLD_ROCKET:
+                    if (!goldRocketActivated)
+                        goldRocketActivated = true;
+                    Speed += BoostAmount;
+                    if (Speed > MaxSpeed + BoostAmount)
+                        Speed = MaxSpeed + BoostAmount;
+                    break;
+            }
+        }
+
+        if (goldRocketActivated)
+        {
+            goldRocketTime -= Time.deltaTime;
+            if (goldRocketTime <= 0)
+            {
+                itemHeld = Items.NONE;
+                goldRocketTime = 0f;
+                goldRocketActivated = false;
+                rockets[2].SetActive(false);
+            }
         }
     }
 
@@ -106,12 +177,27 @@ public class CarMovement : MonoBehaviour
         else if (obj.CompareTag("Chest") && obj.gameObject.activeSelf)
         {
             obj.gameObject.SetActive(false);
-            int itemChooser = Random.Range(0, 1);
+            int itemChooser = UnityEngine.Random.Range(0, 1);
             switch(itemChooser)
             {
                 case 0:
-                    int rocketChosen = Random.Range(0, rockets.Length);
+                    int rocketChosen = UnityEngine.Random.Range(2, 3);
                     rockets[rocketChosen].gameObject.SetActive(true);
+                    switch(rocketChosen)
+                    {
+                        case 0:
+                            itemHeld = Items.BRONZE_ROCKET;
+                            break;
+                        case 1:
+                            itemHeld = Items.SILVER_ROCKET;
+                            silverRocketCount = 3;
+                            break;
+                        case 2:
+                            itemHeld = Items.GOLD_ROCKET;
+                            goldRocketTime = 5f;
+                            break;
+                    }
+
                     break;
             }
         }

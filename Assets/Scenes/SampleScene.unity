@@ -937,11 +937,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99d5b800e0a52c540a372abff361a01a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_PlayerNumber: 1
-  m_Speed: 0
-  m_MaxSpeed: 70
-  m_TurnSpeed: 60
-  m_Acceleration: 0.05
+  PlayerNumber: 1
+  Speed: 0
+  MaxSpeed: 70
+  TurnSpeed: 60
+  Acceleration: 0.05
+  BoostAmount: 50
   coinCountText: {fileID: 717207388}
   bronzeRocketUI: {fileID: 8476355356549615791}
   silverRocketUI: {fileID: 1189430872}
