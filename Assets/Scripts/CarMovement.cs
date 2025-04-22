@@ -13,7 +13,7 @@ public class CarMovement : MonoBehaviour
         BRONZE_ROCKET,
         SILVER_ROCKET,
         GOLD_ROCKET,
-        BLUE_CROCODILE,
+        GREEN_CROCODILE,
         RED_CROCODILE,
         PISTOL_GUN,
         MACHINE_GUN
@@ -24,6 +24,7 @@ public class CarMovement : MonoBehaviour
     public float MaxSpeed;
     public float TurnSpeed;
     public float Acceleration;
+    public float BrakePower;
     public float BoostAmount;
 
     private int coinCount = 0;
@@ -37,7 +38,13 @@ public class CarMovement : MonoBehaviour
     public GameObject bronzeRocketUI;
     public GameObject silverRocketUI;
     public GameObject goldRocketUI;
+    public GameObject greenCrocUI;
+    public GameObject redCrocUI;
     private GameObject[] rockets;
+    private GameObject[] crocs;
+
+    public GameObject greenCroc;
+    public GameObject redCroc;
 
     private string m_MovementAxisName;
     private string m_TurnAxisName;
@@ -56,7 +63,12 @@ public class CarMovement : MonoBehaviour
         bronzeRocketUI.SetActive(false);
         silverRocketUI.SetActive(false);
         goldRocketUI.SetActive(false);
+        greenCrocUI.SetActive(false);
+        redCrocUI.SetActive(false);
+        greenCroc.SetActive(false);
+        redCroc.SetActive(false);
         rockets = new GameObject[] { bronzeRocketUI, silverRocketUI, goldRocketUI };
+        crocs = new GameObject[] { greenCrocUI, redCrocUI };
     }
 
     // Update is called once per frame
@@ -82,7 +94,7 @@ public class CarMovement : MonoBehaviour
         else if (Input.GetKey(KeyCode.S))
         {
             if (Speed > -MaxSpeed)
-                Speed -= Acceleration;
+                Speed -= BrakePower;
         }
         else
         {
@@ -121,7 +133,7 @@ public class CarMovement : MonoBehaviour
 
     private void UseItem()
     {
-        if (Input.GetKeyDown(KeyCode.LeftShift) && itemHeld != Items.NONE)
+        if (Input.GetKeyDown(KeyCode.Return) && itemHeld != Items.NONE)
         {
             switch (itemHeld)
             {
@@ -132,6 +144,7 @@ public class CarMovement : MonoBehaviour
                     itemHeld = Items.NONE;
                     rockets[0].SetActive(false);
                     break;
+
                 case Items.SILVER_ROCKET:
                     Speed += BoostAmount;
                     if (Speed > MaxSpeed + BoostAmount)
@@ -143,12 +156,22 @@ public class CarMovement : MonoBehaviour
                         rockets[1].SetActive(false);
                     }
                     break;
+
                 case Items.GOLD_ROCKET:
                     if (!goldRocketActivated)
                         goldRocketActivated = true;
                     Speed += BoostAmount;
                     if (Speed > MaxSpeed + BoostAmount)
                         Speed = MaxSpeed + BoostAmount;
+                    break;
+
+                case Items.GREEN_CROCODILE:
+                    GreenCroc greenCrocScript = greenCroc.GetComponent<GreenCroc>();
+                    greenCroc.gameObject.SetActive(true);
+                    greenCroc.transform.position = transform.position;
+                    greenCroc.transform.rotation = transform.rotation;
+                    greenCrocScript.Speed = 90;
+                    crocs[0].SetActive(false);
                     break;
             }
         }
@@ -177,13 +200,13 @@ public class CarMovement : MonoBehaviour
         else if (obj.CompareTag("Chest") && obj.gameObject.activeSelf)
         {
             obj.gameObject.SetActive(false);
-            int itemChooser = UnityEngine.Random.Range(0, 1);
-            switch(itemChooser)
+            int itemChooser = UnityEngine.Random.Range(1, 2);
+            switch (itemChooser)
             {
                 case 0:
-                    int rocketChosen = UnityEngine.Random.Range(2, 3);
+                    int rocketChosen = UnityEngine.Random.Range(0, 3);
                     rockets[rocketChosen].gameObject.SetActive(true);
-                    switch(rocketChosen)
+                    switch (rocketChosen)
                     {
                         case 0:
                             itemHeld = Items.BRONZE_ROCKET;
@@ -198,6 +221,20 @@ public class CarMovement : MonoBehaviour
                             break;
                     }
 
+                    break;
+
+                case 1:
+                    int crocChosen = UnityEngine.Random.Range(0, 1);
+                    crocs[crocChosen].gameObject.SetActive(true);
+                    switch (crocChosen)
+                    {
+                        case 0:
+                            itemHeld = Items.GREEN_CROCODILE;
+                            break;
+                        case 1:
+                            itemHeld = Items.RED_CROCODILE;
+                            break;
+                    }
                     break;
             }
         }

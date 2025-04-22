@@ -7,6 +7,7 @@ TagManager:
   - Ground
   - Coin
   - Chest
+  - Croc
   layers:
   - Default
   - TransparentFX
