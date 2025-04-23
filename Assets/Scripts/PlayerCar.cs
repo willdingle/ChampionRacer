@@ -5,7 +5,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class CarMovement : MonoBehaviour
+public class PlayerCar : MonoBehaviour
 {
     private enum Items
     {

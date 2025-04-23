@@ -15,14 +15,7 @@ public class GreenCroc : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(0, 0, Speed * Time.deltaTime);
-    }
-
-    private void OnTriggerEnter(Collider obj)
-    {
-        if (obj.CompareTag("Car"))
-        {
-            obj.gameObject.GetComponent<CarMovement>().Speed = 0;
-        }
+        //transform.position.Set(transform.position.x, 1, transform.position.z);
+        //transform.Translate(0, 0, Speed * Time.deltaTime);
     }
 }
