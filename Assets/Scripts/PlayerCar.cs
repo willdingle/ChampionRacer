@@ -168,10 +168,15 @@ public class PlayerCar : MonoBehaviour
                 case Items.GREEN_CROCODILE:
                     GreenCroc greenCrocScript = greenCroc.GetComponent<GreenCroc>();
                     greenCroc.gameObject.SetActive(true);
-                    greenCroc.transform.position = transform.position;
+                    greenCroc.transform.position = new Vector3(transform.position.x, 1, transform.position.z);
                     greenCroc.transform.rotation = transform.rotation;
                     greenCrocScript.Speed = 90;
                     crocs[0].SetActive(false);
+                    itemHeld = Items.NONE;
+                    break;
+
+                case Items.RED_CROCODILE:
+
                     break;
             }
         }
@@ -200,7 +205,7 @@ public class PlayerCar : MonoBehaviour
         else if (obj.CompareTag("Chest") && obj.gameObject.activeSelf)
         {
             obj.gameObject.SetActive(false);
-            int itemChooser = UnityEngine.Random.Range(1, 2);
+            int itemChooser = UnityEngine.Random.Range(0, 2);
             switch (itemChooser)
             {
                 case 0:
@@ -224,7 +229,7 @@ public class PlayerCar : MonoBehaviour
                     break;
 
                 case 1:
-                    int crocChosen = UnityEngine.Random.Range(0, 1);
+                    int crocChosen = UnityEngine.Random.Range(0, 2);
                     crocs[crocChosen].gameObject.SetActive(true);
                     switch (crocChosen)
                     {

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GreenCroc : MonoBehaviour
+public class RedCroc : MonoBehaviour
 {
     public float Speed;
 
@@ -15,6 +15,6 @@ public class GreenCroc : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(0, 0, Speed * Time.deltaTime);
+        GameObject oppCar = GameObject.Find("Opponent Car");
     }
 }
