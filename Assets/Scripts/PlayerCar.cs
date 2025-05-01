@@ -88,12 +88,17 @@ public class PlayerCar : MonoBehaviour
 
         if (Input.GetKey(KeyCode.W))
         {
-            if (Speed < MaxSpeed)
+            if (Speed < MaxSpeed && Speed >= 0)
                 Speed += Acceleration;
+            else if (Speed > -MaxSpeed && Speed < 0)
+                Speed += BrakePower;
+
         }
         else if (Input.GetKey(KeyCode.S))
         {
-            if (Speed > -MaxSpeed)
+            if (Speed > -MaxSpeed && Speed <= 0)
+                Speed -= Acceleration;
+            else if (Speed < MaxSpeed && Speed > 0)
                 Speed -= BrakePower;
         }
         else
@@ -168,7 +173,7 @@ public class PlayerCar : MonoBehaviour
                 case Items.GREEN_CROCODILE:
                     GreenCroc greenCrocScript = greenCroc.GetComponent<GreenCroc>();
                     greenCroc.gameObject.SetActive(true);
-                    greenCroc.transform.position = new Vector3(transform.position.x, 1, transform.position.z);
+                    greenCroc.transform.position = new Vector3(transform.position.x, 4, transform.position.z);
                     greenCroc.transform.rotation = transform.rotation;
                     greenCrocScript.Speed = 90;
                     crocs[0].SetActive(false);
