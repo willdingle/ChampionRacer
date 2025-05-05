@@ -173,7 +173,7 @@ public class PlayerCar : MonoBehaviour
                 case Items.GREEN_CROCODILE:
                     GreenCroc greenCrocScript = greenCroc.GetComponent<GreenCroc>();
                     greenCroc.gameObject.SetActive(true);
-                    greenCroc.transform.position = new Vector3(transform.position.x, 4, transform.position.z);
+                    greenCroc.transform.position = new Vector3(transform.position.x, transform.position.y + 1, transform.position.z);
                     greenCroc.transform.rotation = transform.rotation;
                     greenCrocScript.Speed = 90;
                     crocs[0].SetActive(false);
