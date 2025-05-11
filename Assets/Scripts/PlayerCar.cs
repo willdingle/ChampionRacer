@@ -89,32 +89,32 @@ public class PlayerCar : MonoBehaviour
         if (Input.GetKey(KeyCode.W))
         {
             if (Speed < MaxSpeed && Speed >= 0)
-                Speed += Acceleration;
+                Speed += Acceleration * Time.deltaTime;
             else if (Speed > -MaxSpeed && Speed < 0)
-                Speed += BrakePower;
+                Speed += BrakePower * Time.deltaTime;
 
         }
         else if (Input.GetKey(KeyCode.S))
         {
             if (Speed > -MaxSpeed && Speed <= 0)
-                Speed -= Acceleration;
+                Speed -= Acceleration * Time.deltaTime;
             else if (Speed < MaxSpeed && Speed > 0)
-                Speed -= BrakePower;
+                Speed -= BrakePower * Time.deltaTime;
         }
         else
         {
             if (Speed > -Acceleration && Speed < Acceleration)
                 Speed = 0f;
             if (Speed > 0f)
-                Speed -= Acceleration;
+                Speed -= Acceleration * Time.deltaTime;
             else if (Speed < 0f)
-                Speed += Acceleration;
+                Speed += Acceleration * Time.deltaTime;
         }
 
         //Slow down car while boosted
         if (Speed > MaxSpeed)
         {
-            Speed -= Acceleration;
+            Speed -= Acceleration * Time.deltaTime;
         }
 
         transform.Translate(0, 0, Speed * Time.deltaTime);
