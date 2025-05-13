@@ -27,6 +27,8 @@ public class PlayerCar : MonoBehaviour
     public float BrakePower;
     public float BoostAmount;
 
+    public GameObject flWheel, frWheel, rlWheel, rrWheel;
+
     private int coinCount = 0;
     public TMP_Text coinCountText;
 
@@ -79,6 +81,7 @@ public class PlayerCar : MonoBehaviour
         Move();
         Turn();
         UseItem();
+        Animate();
     }
 
     private void Move()
@@ -103,7 +106,7 @@ public class PlayerCar : MonoBehaviour
         }
         else
         {
-            if (Speed > -Acceleration && Speed < Acceleration)
+            if (Speed > -1 && Speed < 1)
                 Speed = 0f;
             if (Speed > 0f)
                 Speed -= Acceleration * Time.deltaTime;
@@ -134,6 +137,14 @@ public class PlayerCar : MonoBehaviour
         {
             transform.Rotate(0, TurnSpeed * Time.deltaTime, 0);
         }
+    }
+
+    private void Animate()
+    {
+        flWheel.transform.Rotate(Speed / 5, 0, 0);
+        frWheel.transform.Rotate(Speed / 5, 0, 0);
+        rlWheel.transform.Rotate(Speed / 5, 0, 0);
+        rrWheel.transform.Rotate(Speed / 5, 0, 0);
     }
 
     private void UseItem()
