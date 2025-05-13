@@ -21,6 +21,7 @@ public class PlayerCar : MonoBehaviour
 
     public int PlayerNumber = 1;
     public float Speed;
+    public TMP_Text speedText;
     public float MaxSpeed;
     public float TurnSpeed;
     public float Acceleration;
@@ -121,6 +122,7 @@ public class PlayerCar : MonoBehaviour
         }
 
         transform.Translate(0, 0, Speed * Time.deltaTime);
+        speedText.text = "" + Math.Round(Speed);
     }
 
     private void Turn()
