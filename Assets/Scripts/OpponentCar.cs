@@ -6,6 +6,8 @@ public class OpponentCar : MonoBehaviour
 {
     public float Speed;
     public float MaxSpeed;
+    public float TurnAmount;
+    public float Acceleration;
 
     public GameObject flWheel, frWheel, rlWheel, rrWheel;
 
@@ -19,12 +21,18 @@ public class OpponentCar : MonoBehaviour
     void Update()
     {
         Move();
+        Turn();
         Animate();
     }
 
     private void Move()
     {
         transform.Translate(0, 0, Speed * Time.deltaTime);
+    }
+
+    private void Turn()
+    {
+        transform.Rotate(0, TurnAmount * Time.deltaTime, 0);
     }
 
     private void Animate()

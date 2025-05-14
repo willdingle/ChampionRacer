@@ -1982,6 +1982,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Speed: 20
   MaxSpeed: 0
+  TurnAmount: 0
+  Acceleration: 0
+  flWheel: {fileID: 0}
+  frWheel: {fileID: 0}
+  rlWheel: {fileID: 0}
+  rrWheel: {fileID: 0}
 --- !u!195 &687685718
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -4321,11 +4327,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerNumber: 1
   Speed: 0
+  speedText: {fileID: 0}
   MaxSpeed: 50
   TurnSpeed: 60
   Acceleration: 0.05
   BrakePower: 0.2
   BoostAmount: 50
+  flWheel: {fileID: 0}
+  frWheel: {fileID: 0}
+  rlWheel: {fileID: 0}
+  rrWheel: {fileID: 0}
   coinCountText: {fileID: 717207388}
   bronzeRocketUI: {fileID: 8476355356549615791}
   silverRocketUI: {fileID: 1189430872}
@@ -4458,69 +4469,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1511869408}
   m_SourcePrefab: {fileID: 100100000, guid: 62010132604e8c94d96b4cb4fe6d3394, type: 3}
---- !u!1 &1596633561
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1596633563}
-  - component: {fileID: 1596633562}
-  m_Layer: 0
-  m_Name: NavMesh Surface
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1596633562
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1596633561}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_AgentTypeID: -334000983
-  m_CollectObjects: 0
-  m_Size: {x: 10, y: 10, z: 10}
-  m_Center: {x: 0, y: 2, z: 0}
-  m_LayerMask:
-    serializedVersion: 2
-    m_Bits: 64
-  m_UseGeometry: 0
-  m_DefaultArea: 0
-  m_GenerateLinks: 0
-  m_IgnoreNavMeshAgent: 1
-  m_IgnoreNavMeshObstacle: 1
-  m_OverrideTileSize: 0
-  m_TileSize: 256
-  m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.16666667
-  m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: 9ea4929946f677a47af4968e9a1dcdd7, type: 2}
-  m_BuildHeightMesh: 0
---- !u!4 &1596633563
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1596633561}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 18.77997, y: 10.270999, z: 8.411108}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1628984375
 GameObject:
   m_ObjectHideFlags: 0
@@ -45704,4 +45652,3 @@ SceneRoots:
   - {fileID: 544426015}
   - {fileID: 501253467}
   - {fileID: 1169386708}
-  - {fileID: 1596633563}
