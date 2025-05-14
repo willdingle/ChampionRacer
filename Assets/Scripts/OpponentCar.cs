@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class OpponentCar : MonoBehaviour
 {
@@ -21,6 +22,8 @@ public class OpponentCar : MonoBehaviour
 
     public GameObject flWheel, frWheel, rlWheel, rrWheel;
 
+    public int lap = 1;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -37,6 +40,23 @@ public class OpponentCar : MonoBehaviour
         if (waypoints.Count > 0)
         {
             calcMovement();
+        }
+        else
+        {
+            lap += 1;
+            if (lap > 1)
+            {
+                //Opponent wins
+                SceneManager.LoadScene("LoseRace");
+            }
+            else
+            {
+                foreach (Transform waypoint in waypointsHolder.transform)
+                {
+                    waypoints.Add(waypoint.gameObject);
+                    //Debug.Log(waypoint.name);
+                }
+            }
         }
 
         Move();

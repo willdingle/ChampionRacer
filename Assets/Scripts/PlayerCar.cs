@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerCar : MonoBehaviour
 {
@@ -56,6 +57,9 @@ public class PlayerCar : MonoBehaviour
     int racePos = 2;
     public TMP_Text racePosText;
 
+    int lap = 1;
+    public TMP_Text lapText;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -74,6 +78,11 @@ public class PlayerCar : MonoBehaviour
             waypoints.Add(waypoint.gameObject);
             //Debug.Log(waypoint.name);
         }
+
+        MaxSpeed = GlobalData.MaxSpeed;
+        Acceleration = GlobalData.Acceleration;
+        coinCount = GlobalData.coins;
+        coinCountText.text = "Coins: " + coinCount;
     }
 
     // Update is called once per frame
@@ -82,6 +91,25 @@ public class PlayerCar : MonoBehaviour
         if (waypoints.Count > 0)
         {
             calcRacePos();
+        }
+        else
+        {
+            lap += 1;
+            if (lap > 3)
+            {
+                //Player wins
+                SceneManager.LoadScene("WinRace");
+            }
+            else
+            {
+                lapText.text = "Lap: " + lap;
+
+                foreach (Transform waypoint in waypointsHolder.transform)
+                {
+                    waypoints.Add(waypoint.gameObject);
+                    //Debug.Log(waypoint.name);
+                }
+            }
         }
         
         Move();
@@ -102,33 +130,50 @@ public class PlayerCar : MonoBehaviour
             waypoints.Remove(waypoints[0]);
         }
 
-        int oppWaypointsLeft = opponentCar.GetComponent<OpponentCar>().waypoints.Count;
-        Debug.Log(waypoints.Count);
-        Debug.Log(oppWaypointsLeft);
-        if (oppWaypointsLeft > waypoints.Count)
+        //Check if player and opponent are on different laps
+        int oppLap = opponentCar.GetComponent<OpponentCar>().lap;
+        if (lap > oppLap)
         {
             racePos = 1;
         }
-        else if (oppWaypointsLeft < waypoints.Count)
+        else if (lap < oppLap)
         {
             racePos = 2;
         }
         else
         {
-            float playerDistanceToWaypoint = Vector3.Distance(transform.position, waypoints[0].transform.position);
-            float oppDistanceToWaypoint = Vector3.Distance(opponentCar.transform.position, waypoints[0].transform.position);
-            Debug.Log(playerDistanceToWaypoint);
-            Debug.Log(oppDistanceToWaypoint);
-
-            if (playerDistanceToWaypoint < oppDistanceToWaypoint)
+            //Check if player and opponent have a different number of waypoints left
+            int oppWaypointsLeft = opponentCar.GetComponent<OpponentCar>().waypoints.Count;
+            Debug.Log(waypoints.Count);
+            Debug.Log(oppWaypointsLeft);
+            if (oppWaypointsLeft > waypoints.Count)
             {
                 racePos = 1;
             }
-            else
+            else if (oppWaypointsLeft < waypoints.Count)
             {
                 racePos = 2;
             }
+            else
+            {
+                //Check difference in player and opponent distances between them and the next waypoint
+                float playerDistanceToWaypoint = Vector3.Distance(transform.position, waypoints[0].transform.position);
+                float oppDistanceToWaypoint = Vector3.Distance(opponentCar.transform.position, waypoints[0].transform.position);
+                Debug.Log(playerDistanceToWaypoint);
+                Debug.Log(oppDistanceToWaypoint);
+
+                if (playerDistanceToWaypoint < oppDistanceToWaypoint)
+                {
+                    racePos = 1;
+                }
+                else
+                {
+                    racePos = 2;
+                }
+            }
         }
+
+        
 
         if (racePos == 1)
         {
