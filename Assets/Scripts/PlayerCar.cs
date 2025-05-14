@@ -49,20 +49,16 @@ public class PlayerCar : MonoBehaviour
     public GameObject greenCroc;
     public GameObject redCroc;
 
-    private string m_MovementAxisName;
-    private string m_TurnAxisName;
-    private float m_MovementInputValue;
-    private float m_TurnInputValue;
+    public GameObject waypointsHolder;
+    public List<GameObject> waypoints;
+    public GameObject opponentCar;
 
-    private Rigidbody m_Rigidbody;
+    int racePos = 2;
+    public TMP_Text racePosText;
 
     // Start is called before the first frame update
     void Start()
     {
-        //m_MovementAxisName = "Vertical" + m_PlayerNumber;
-        //m_TurnAxisName = "Horizontal" + m_PlayerNumber;
-        m_Rigidbody = GetComponent<Rigidbody>();
-
         bronzeRocketUI.SetActive(false);
         silverRocketUI.SetActive(false);
         goldRocketUI.SetActive(false);
@@ -72,23 +68,81 @@ public class PlayerCar : MonoBehaviour
         redCroc.SetActive(false);
         rockets = new GameObject[] { bronzeRocketUI, silverRocketUI, goldRocketUI };
         crocs = new GameObject[] { greenCrocUI, redCrocUI };
+
+        foreach (Transform waypoint in waypointsHolder.transform)
+        {
+            waypoints.Add(waypoint.gameObject);
+            //Debug.Log(waypoint.name);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        //m_MovementInputValue = Input.GetAxis(m_MovementAxisName);
-        //m_TurnInputValue = Input.GetAxis(m_TurnAxisName);
+        if (waypoints.Count > 0)
+        {
+            calcRacePos();
+        }
+        
         Move();
         Turn();
         UseItem();
         Animate();
     }
 
+    void calcRacePos()
+    {
+        //Work out dot product between car and waypoint
+        Vector3 carWaypointDistanceNorm = (waypoints[0].transform.position - transform.position).normalized;
+        float dotProduct = Vector3.Dot(transform.forward, carWaypointDistanceNorm);
+
+        //If dot product < 0, remove this waypoint (check if waypoint passed)
+        if (dotProduct < 0)
+        {
+            waypoints.Remove(waypoints[0]);
+        }
+
+        int oppWaypointsLeft = opponentCar.GetComponent<OpponentCar>().waypoints.Count;
+        Debug.Log(waypoints.Count);
+        Debug.Log(oppWaypointsLeft);
+        if (oppWaypointsLeft > waypoints.Count)
+        {
+            racePos = 1;
+        }
+        else if (oppWaypointsLeft < waypoints.Count)
+        {
+            racePos = 2;
+        }
+        else
+        {
+            float playerDistanceToWaypoint = Vector3.Distance(transform.position, waypoints[0].transform.position);
+            float oppDistanceToWaypoint = Vector3.Distance(opponentCar.transform.position, waypoints[0].transform.position);
+            Debug.Log(playerDistanceToWaypoint);
+            Debug.Log(oppDistanceToWaypoint);
+
+            if (playerDistanceToWaypoint < oppDistanceToWaypoint)
+            {
+                racePos = 1;
+            }
+            else
+            {
+                racePos = 2;
+            }
+        }
+
+        if (racePos == 1)
+        {
+            racePosText.text = "1st";
+        }
+        else
+        {
+            racePosText.text = "2nd";
+        }
+
+    }
+
     private void Move()
     {
-        //Vector3 movement = transform.forward * m_MovementInputValue * m_Speed * Time.deltaTime;
-        //m_Rigidbody.MovePosition(m_Rigidbody.position + movement);
 
         if (Input.GetKey(KeyCode.W))
         {

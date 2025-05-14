@@ -17,7 +17,6 @@ public class HouseNPC : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(transform.position.z);
         if (transform.position.z < turnPositionLow 
             || transform.position.z > turnPositionHigh)
         {
