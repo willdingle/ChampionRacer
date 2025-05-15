@@ -8,10 +8,7 @@ public class MainMenu : MonoBehaviour
     public void PlayButton()
     {
         GlobalData.nextRace = "Track 1";
-        GlobalData.MaxSpeed = 50;
-        GlobalData.Acceleration = 10;
-        GlobalData.coins = 5;
-        SceneManager.LoadScene("Track 1");
+        SceneManager.LoadScene("Story Menu");
     }
 
     public void QuitButton()

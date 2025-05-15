@@ -667,7 +667,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 516294432}
         m_TargetAssemblyTypeName: WinRaceMenu, Assembly-CSharp
-        m_MethodName: NextRaceButton
+        m_MethodName: QuitButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

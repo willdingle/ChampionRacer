@@ -111,11 +111,31 @@ public class PlayerCar : MonoBehaviour
                 }
             }
         }
-        
+
+        checkIfOnRoad();
         Move();
         Turn();
         UseItem();
         Animate();
+
+        //transform.rotation = Quaternion.Euler(0, transform.rotation.y, 0);
+    }
+
+    void checkIfOnRoad()
+    {
+        LayerMask mask = LayerMask.GetMask("Roads");
+
+        //Raycast downwards from 1 unit above the car, with a maximum length of infinity, only checking for collision with roads
+        if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, Mathf.Infinity, mask))
+        {
+            Debug.Log("on road");
+            MaxSpeed = GlobalData.MaxSpeed;
+        }
+        else
+        {
+            Debug.Log("off road");
+            MaxSpeed = GlobalData.MaxSpeed - 30;
+        }
     }
 
     void calcRacePos()
@@ -144,8 +164,8 @@ public class PlayerCar : MonoBehaviour
         {
             //Check if player and opponent have a different number of waypoints left
             int oppWaypointsLeft = opponentCar.GetComponent<OpponentCar>().waypoints.Count;
-            Debug.Log(waypoints.Count);
-            Debug.Log(oppWaypointsLeft);
+            //Debug.Log(waypoints.Count);
+            //Debug.Log(oppWaypointsLeft);
             if (oppWaypointsLeft > waypoints.Count)
             {
                 racePos = 1;
@@ -317,6 +337,7 @@ public class PlayerCar : MonoBehaviour
         {
             obj.gameObject.SetActive(false);
             coinCount++;
+            GlobalData.coins++;
             coinCountText.text = "Coins: " + coinCount;
         }
         else if (obj.CompareTag("Chest") && obj.gameObject.activeSelf)
@@ -359,6 +380,10 @@ public class PlayerCar : MonoBehaviour
                     }
                     break;
             }
+        }
+        else
+        {
+            Speed = 0f;
         }
     }
 }
