@@ -108,8 +108,16 @@ public class PlayerCar : MonoBehaviour
             if (lap > 3)
             {
                 //Player wins
-                GlobalData.nextRace = "Track 2";
-                SceneManager.LoadScene("WinRace");
+                if (GlobalData.nextRace == "Track 1")
+                {
+                    GlobalData.nextRace = "Track 2";
+                    SceneManager.LoadScene("WinRace");
+                }
+                else
+                {
+                    SceneManager.LoadScene("WinGame");
+                }
+                
             }
             else
             {
@@ -380,7 +388,7 @@ public class PlayerCar : MonoBehaviour
             foreach (GameObject croc in crocs)
                 croc.SetActive(false);
 
-            int itemChooser = UnityEngine.Random.Range(1, 2);
+            int itemChooser = UnityEngine.Random.Range(0, 2);
             switch (itemChooser)
             {
                 case 0:
@@ -404,7 +412,7 @@ public class PlayerCar : MonoBehaviour
                     break;
 
                 case 1:
-                    int crocChosen = UnityEngine.Random.Range(1, 2);
+                    int crocChosen = UnityEngine.Random.Range(0, 2);
                     crocs[crocChosen].SetActive(true);
                     switch (crocChosen)
                     {

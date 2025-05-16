@@ -7,6 +7,7 @@ public class HouseNPC : MonoBehaviour
 {
     public float turnPositionHigh;
     public float turnPositionLow;
+    public string mode;
 
     // Start is called before the first frame update
     void Start()
@@ -17,12 +18,31 @@ public class HouseNPC : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (transform.position.z < turnPositionLow 
-            || transform.position.z > turnPositionHigh)
+        switch (mode)
         {
-            transform.Rotate(0, 180, 0);
+            case "X":
+                if (transform.position.x < turnPositionLow
+                    || transform.position.x > turnPositionHigh)
+                {
+                    transform.Rotate(0, 180, 0);
+                }
+                break;
+            case "Y":
+                break;
+            case "Z":
+                if (transform.position.z < turnPositionLow
+                    || transform.position.z > turnPositionHigh)
+                {
+                    transform.Rotate(0, 180, 0);
+                }
+                
+                break;
         }
 
         transform.Translate(0, 0, 5 * Time.deltaTime);
+
+
+
+
     }
 }
