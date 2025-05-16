@@ -104,6 +104,7 @@ public class PlayerCar : MonoBehaviour
                 if (GlobalData.nextRace == "Track 1")
                 {
                     GlobalData.nextRace = "Track 2";
+                    GlobalData.FinalOppMaxSpeed = MaxSpeed + 5;
                     SceneManager.LoadScene("WinRace");
                 }
                 else

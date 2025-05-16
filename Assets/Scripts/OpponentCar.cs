@@ -35,7 +35,7 @@ public class OpponentCar : MonoBehaviour
 
         if (GlobalData.nextRace == "Track 2")
         {
-            MaxSpeed = GlobalData.MaxSpeed + 5;
+            MaxSpeed = GlobalData.FinalOppMaxSpeed;
         }
     }
 
