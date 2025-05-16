@@ -32,6 +32,11 @@ public class OpponentCar : MonoBehaviour
             waypoints.Add(waypoint.gameObject);
             //Debug.Log(waypoint.name);
         }
+
+        if (GlobalData.nextRace == "Track 2")
+        {
+            MaxSpeed = GlobalData.MaxSpeed + 5;
+        }
     }
 
     // Update is called once per frame
@@ -76,12 +81,7 @@ public class OpponentCar : MonoBehaviour
 
             //If dot product < 0, go to next waypoint
             // If dot product > 0, store this waypoint
-            if (dotProduct < 0)
-            {
-                waypoints.Remove(waypoint);
-                continue;
-            }
-            else
+            if (dotProduct > 0)
             {
                 nextWaypoint = waypoint;
                 carDirection = 1;
@@ -100,6 +100,11 @@ public class OpponentCar : MonoBehaviour
                     carRotation = 0;
                 }
                 break;
+            }
+            else
+            {
+                waypoints.Remove(waypoint);
+                continue;
             }
         }
     }

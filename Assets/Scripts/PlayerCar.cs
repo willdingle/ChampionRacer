@@ -52,6 +52,9 @@ public class PlayerCar : MonoBehaviour
 
     public GameObject waypointsHolder;
     public List<GameObject> waypoints;
+    public GameObject chestsHolder;
+    public List<GameObject> chests;
+
     public GameObject opponentCar;
 
     int racePos = 2;
@@ -79,6 +82,12 @@ public class PlayerCar : MonoBehaviour
             //Debug.Log(waypoint.name);
         }
 
+        foreach (Transform chest in chestsHolder.transform)
+        {
+            waypoints.Add(chest.gameObject);
+            //Debug.Log(waypoint.name);
+        }
+
         MaxSpeed = GlobalData.MaxSpeed;
         Acceleration = GlobalData.Acceleration;
         coinCount = GlobalData.coins;
@@ -88,6 +97,7 @@ public class PlayerCar : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.Log(waypoints.Count);
         if (waypoints.Count > 0)
         {
             calcRacePos();
@@ -110,6 +120,11 @@ public class PlayerCar : MonoBehaviour
                     waypoints.Add(waypoint.gameObject);
                     //Debug.Log(waypoint.name);
                 }
+
+                foreach(GameObject chest in chests)
+                {
+                    chest.SetActive(true);
+                }
             }
         }
 
@@ -129,27 +144,36 @@ public class PlayerCar : MonoBehaviour
         //Raycast downwards from 1 unit above the car, with a maximum length of infinity, only checking for collision with roads
         if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, Mathf.Infinity, mask))
         {
-            Debug.Log("on road");
+            //Debug.Log("on road");
             MaxSpeed = GlobalData.MaxSpeed;
         }
         else
         {
-            Debug.Log("off road");
+            //Debug.Log("off road");
             MaxSpeed = GlobalData.MaxSpeed - 30;
         }
     }
 
     void calcRacePos()
     {
-        //Work out dot product between car and waypoint
-        Vector3 carWaypointDistanceNorm = (waypoints[0].transform.position - transform.position).normalized;
-        float dotProduct = Vector3.Dot(transform.forward, carWaypointDistanceNorm);
-
-        //If dot product < 0, remove this waypoint (check if waypoint passed)
-        if (dotProduct < 0)
+        foreach(GameObject waypoint in waypoints)
         {
-            waypoints.Remove(waypoints[0]);
+            //Work out dot product between car and waypoint
+            Vector3 carWaypointDistanceNorm = (waypoint.transform.position - transform.position).normalized;
+            float dotProduct = Vector3.Dot(transform.forward, carWaypointDistanceNorm);
+
+            //If dot product > 0, this shows that is the next waypoint so break out of waypoint checking
+            //If dot product < 0, remove this waypoint (check if waypoint passed)
+            if (dotProduct > 0)
+            {
+                break;
+            }
+            else
+            {
+                waypoints.Remove(waypoint);
+            }
         }
+        
 
         //Check if player and opponent are on different laps
         int oppLap = opponentCar.GetComponent<OpponentCar>().lap;
@@ -305,7 +329,7 @@ public class PlayerCar : MonoBehaviour
 
                 case Items.GREEN_CROCODILE:
                     GreenCroc greenCrocScript = greenCroc.GetComponent<GreenCroc>();
-                    greenCroc.gameObject.SetActive(true);
+                    greenCroc.SetActive(true);
                     greenCroc.transform.position = new Vector3(transform.position.x, transform.position.y + 1, transform.position.z);
                     greenCroc.transform.rotation = transform.rotation;
                     greenCrocScript.Speed = 90;
@@ -314,7 +338,13 @@ public class PlayerCar : MonoBehaviour
                     break;
 
                 case Items.RED_CROCODILE:
-
+                    RedCroc redCrocScript = redCroc.GetComponent<RedCroc>();
+                    redCroc.SetActive(true);
+                    redCroc.transform.position = new Vector3(transform.position.x, transform.position.y + 1, transform.position.z);
+                    redCroc.transform.rotation = transform.rotation;
+                    redCrocScript.Speed = 70;
+                    crocs[1].SetActive(false);
+                    itemHeld = Items.NONE;
                     break;
             }
         }
@@ -344,12 +374,18 @@ public class PlayerCar : MonoBehaviour
         else if (obj.CompareTag("Chest") && obj.gameObject.activeSelf)
         {
             obj.gameObject.SetActive(false);
-            int itemChooser = UnityEngine.Random.Range(0, 2);
+            itemHeld = Items.NONE;
+            foreach(GameObject rocket in rockets)
+                rocket.SetActive(false);
+            foreach (GameObject croc in crocs)
+                croc.SetActive(false);
+
+            int itemChooser = UnityEngine.Random.Range(1, 2);
             switch (itemChooser)
             {
                 case 0:
                     int rocketChosen = UnityEngine.Random.Range(0, 3);
-                    rockets[rocketChosen].gameObject.SetActive(true);
+                    rockets[rocketChosen].SetActive(true);
                     switch (rocketChosen)
                     {
                         case 0:
@@ -368,8 +404,8 @@ public class PlayerCar : MonoBehaviour
                     break;
 
                 case 1:
-                    int crocChosen = UnityEngine.Random.Range(0, 2);
-                    crocs[crocChosen].gameObject.SetActive(true);
+                    int crocChosen = UnityEngine.Random.Range(1, 2);
+                    crocs[crocChosen].SetActive(true);
                     switch (crocChosen)
                     {
                         case 0:
@@ -382,7 +418,7 @@ public class PlayerCar : MonoBehaviour
                     break;
             }
         }
-        else
+        else if (!obj.CompareTag("Croc"))
         {
             Speed = 0f;
         }
