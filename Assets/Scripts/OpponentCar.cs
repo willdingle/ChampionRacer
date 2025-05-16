@@ -44,7 +44,7 @@ public class OpponentCar : MonoBehaviour
         else
         {
             lap += 1;
-            if (lap > 1)
+            if (lap > 3)
             {
                 //Opponent wins
                 SceneManager.LoadScene("LoseRace");

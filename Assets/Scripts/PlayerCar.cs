@@ -98,6 +98,7 @@ public class PlayerCar : MonoBehaviour
             if (lap > 3)
             {
                 //Player wins
+                GlobalData.nextRace = "Track 2";
                 SceneManager.LoadScene("WinRace");
             }
             else
