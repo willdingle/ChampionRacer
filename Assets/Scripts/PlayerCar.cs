@@ -53,7 +53,6 @@ public class PlayerCar : MonoBehaviour
     public GameObject waypointsHolder;
     public List<GameObject> waypoints;
     public GameObject chestsHolder;
-    public List<GameObject> chests;
 
     public GameObject opponentCar;
 
@@ -79,12 +78,6 @@ public class PlayerCar : MonoBehaviour
         foreach (Transform waypoint in waypointsHolder.transform)
         {
             waypoints.Add(waypoint.gameObject);
-            //Debug.Log(waypoint.name);
-        }
-
-        foreach (Transform chest in chestsHolder.transform)
-        {
-            waypoints.Add(chest.gameObject);
             //Debug.Log(waypoint.name);
         }
 
@@ -129,9 +122,9 @@ public class PlayerCar : MonoBehaviour
                     //Debug.Log(waypoint.name);
                 }
 
-                foreach(GameObject chest in chests)
+                foreach(Transform chest in chestsHolder.transform)
                 {
-                    chest.SetActive(true);
+                    chest.gameObject.SetActive(true);
                 }
             }
         }
