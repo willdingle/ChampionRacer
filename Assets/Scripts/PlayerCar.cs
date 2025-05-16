@@ -136,7 +136,10 @@ public class PlayerCar : MonoBehaviour
         UseItem();
         Animate();
 
-        //transform.rotation = Quaternion.Euler(0, transform.rotation.y, 0);
+        if (Input.GetKeyDown(KeyCode.F2) && GlobalData.nextRace == "Track 2")
+        {
+            SceneManager.LoadScene("WinGame");
+        }
     }
 
     void checkIfOnRoad()
