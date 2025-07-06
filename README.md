@@ -1,5 +1,5 @@
 # Champion Racer
-A 3D racing game made in Unity.
+A 3D racing game, made in Unity and programmed using C#.
 
 ## Controls
 - Accelerate: W
